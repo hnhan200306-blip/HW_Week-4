@@ -1,73 +1,112 @@
 /* ==========================================================================
-   1. MOBILE VIEW (Mobile-First Approach - KHÔNG bọc trong Media Query)
+   1. MOBILE VIEW (Mobile-first: Mặc định cho điện thoại)
    ========================================================================== */
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin: 0;
-  padding: 15px;
+  padding: 20px;
+  background-color: #ffffff; 
+  color: #333333;
 }
 
-/* Giả định cấu trúc starter code sử dụng thẻ container bọc các thẻ figure */
+header, footer {
+  text-align: center;
+  padding: 15px 0;
+}
+
+/* One column grid với 10px gap */
 .container {
   display: grid;
-  grid-template-columns: 1fr; /* Yêu cầu: One column grid */
-  grid-gap: 10px;             /* Yêu cầu: 10px gap between rows and columns */
+  grid-template-columns: 1fr; 
+  grid-gap: 10px; 
 }
 
 figure {
   margin: 0;
-  padding: 10px;
-  background-color: #f5f5f5; /* Màu nền sáng mặc định */
-  border: 1px solid #ccc;
+  padding: 12px;
+  background-color: #f9f9f9; 
+  border: 1px solid #dddddd;
   text-align: center;
+  box-sizing: border-box;
 }
 
 figure img {
   width: 100%;
   height: auto;
+  display: block;
+}
+
+figcaption {
+  margin-top: 8px;
+  font-weight: 600;
 }
 
 
 /* ==========================================================================
-   2. TABLET VIEW (Triggers at 772px)
+   2. TABLET VIEW (Kích hoạt ở mức màn hình từ 772px trở lên)
    ========================================================================== */
 @media (min-width: 772px) {
+  /* Lưới 2 cột */
   .container {
-    grid-template-columns: 1fr 1fr; /* Yêu cầu: Two column grid */
+    grid-template-columns: 1fr 1fr;
   }
 
+  /* Bo tròn các khung figure thành hình tròn */
   figure {
-    border-radius: 50%; /* Yêu cầu: Circular shape (Bo tròn hình tròn) */
-    overflow: hidden;   /* Đảm bảo ảnh bên trong không bị tràn góc bo */
+    border-radius: 50%;
+    overflow: hidden; 
+    aspect-ratio: 1 / 1; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
 
-  /* Yêu cầu: Set the last figure to take up both columns */
+  figure img {
+    width: 70%; 
+    border-radius: 50%;
+  }
+
+  /* Hình cuối cùng chiếm cả 2 cột */
   figure:last-child {
     grid-column: span 2;
+    aspect-ratio: auto; 
+    border-radius: 30px; 
+  }
+  
+  figure:last-child img {
+    width: 50%;
   }
 }
 
 
 /* ==========================================================================
-   3. LARGE SCREEN VIEW (Triggers at 992px)
+   3. LARGE SCREEN VIEW (Kích hoạt ở mức màn hình từ 992px trở lên)
    ========================================================================== */
 @media (min-width: 992px) {
-  /* Hủy bỏ cấu hình 2 cột của tablet, có thể chia thành 3 hoặc 4 cột tùy bạn chọn 
-     (ở đây ví dụ chia 3 cột để tạo khoảng trống cho phần tử chiếm 2 cột) */
+  /* Hệ thống lưới 3 cột */
   .container {
-    grid-template-columns: 1fr 1fr 1fr; 
+    grid-template-columns: 1fr 1fr 1fr;
   }
 
+  /* Xóa bỏ border radius khỏi toàn bộ các figure */
   figure {
-    border-radius: 0; /* Yêu cầu: Remove the border radius from all of the figures */
+    border-radius: 0;
+    aspect-ratio: auto;
+    display: block;
   }
 
-  /* Reset lại phần tử cuối (bị ảnh hưởng bởi thuộc tính của tablet trước đó) */
+  figure img {
+    width: 100%;
+    border-radius: 0;
+  }
+
+  /* Reset lại trạng thái chiếm 2 cột của tablet */
   figure:last-child {
     grid-column: auto;
   }
 
-  /* Yêu cầu: Set every third figure to take up both columns (Mỗi hình thứ 3 chiếm 2 cột) */
+  /* Cứ mỗi hình thứ 3 (hình 3, 6, 9) sẽ chiếm 2 cột */
   figure:nth-child(3n) {
     grid-column: span 2;
   }
@@ -75,25 +114,22 @@ figure img {
 
 
 /* ==========================================================================
-   4. PREFERS-REDUCED-MOTION MEDIA QUERY
+   4. PREFERS-REDUCED-MOTION (Chế độ giảm chuyển động)
    ========================================================================== */
 @media (prefers-reduced-motion: reduce) {
   html {
-    scroll-behavior: auto !important; /* Yêu cầu: Remove the scroll behavior */
+    scroll-behavior: auto !important; 
   }
   
   *, *::before, *::after {
-    animation-delay: -1ms !important;
-    animation-duration: 1ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 1ms !important;
-    scroll-behavior: auto !important;
+    animation: none !important;
+    transition: none !important;
   }
 }
 
 
 /* ==========================================================================
-   5. DARK MODE MEDIA QUERY (Assuming default is light)
+   5. DARK MODE (Giao diện tối)
    ========================================================================== */
 @media (prefers-color-scheme: dark) {
   body {
@@ -102,8 +138,8 @@ figure img {
   }
 
   figure {
-    background-color: #242424; /* Yêu cầu: Change the background-color to a dark color */
-    color: #fffde7;            /* Yêu cầu: Change font color to a lighter (yellow-ish) color */
-    border-color: #000000;     /* Yêu cầu: Change the border color of the figures to black */
+    background-color: #282828; 
+    color: #fffde7; /* Màu chữ sáng ngả vàng đạt chuẩn tương phản WAVE */
+    border-color: #000000; 
   }
 }
